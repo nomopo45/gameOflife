@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 	"math/rand"
@@ -82,7 +81,7 @@ func (g Grid) countNeighbors(row, col int) int {
 // Update is called every tick (1/60 [s] by default).
 func (g *Game) Update() error {
 	// Update game logic here.
-	g.grid = &g.grid.NextGeneration()
+	g.grid = g.grid.NextGeneration()
 	time.Sleep(time.Millisecond * 100)
 	return nil
 }
@@ -91,8 +90,8 @@ func (g *Game) Update() error {
 // Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
 	// Draw game graphics here.
-	for row := range g.grid {
-		for col, cell := range g.grid[row] {
+	for row := range *g.grid {
+		for col, cell := range (*g.grid)[row] {
 			if cell {
 				ebitenutil.DrawRect(screen, float64(col*cellSize), float64(row*cellSize), cellSize, cellSize, color.White)
 			}
