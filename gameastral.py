@@ -149,8 +149,6 @@ def start_game():
     live(grid, cycles, screen, cell_size, update_time)
     main_menu()
 
-class Node:
-class Node:
     def __init__(self, xy):
         self.xy = xy
         self.on = False
