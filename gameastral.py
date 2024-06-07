@@ -137,6 +137,19 @@ def reset_parameters():
     update_time = 0.5
 
 # Game of Life logic
+
+def start_game():
+    global grid, cell_size
+    rows = HEIGHT // grid_size
+    cols = WIDTH // grid_size
+    cell_size = WIDTH // grid_size
+    grid = gen_nodes(rows, cols)
+    get_neighbors(grid)
+    scatter(grid)
+    live(grid, cycles, screen, cell_size, update_time)
+    main_menu()
+
+class Node:
 class Node:
     def __init__(self, xy):
         self.xy = xy
