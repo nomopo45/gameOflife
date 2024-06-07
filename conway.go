@@ -143,5 +143,5 @@ func main() {
 
 func drawButton(screen *ebiten.Image, x, y, width, height int, color color.Color, label string) {
 	ebitenutil.DrawRect(screen, float64(x), float64(y), float64(width), float64(height), color)
-	text.Draw(screen, label, basicfont.Face7x13, x+10, y+38, color)
+	text.Draw(screen, label, basicfont.Face7x13, x+10, y+38, color.Black)
 }
