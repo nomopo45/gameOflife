@@ -2,9 +2,25 @@ package main
 
 import (
 	"fmt"
+	"image/color"
+	"log"
 	"math/rand"
 	"time"
+
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
+
+const (
+	screenWidth  = 640
+	screenHeight = 480
+	cellSize     = 10
+)
+
+// Game implements ebiten.Game interface.
+type Game struct {
+	grid *Grid
+}
 
 // Grid represents the game board
 type Grid [][]bool
@@ -26,20 +42,6 @@ func (g Grid) Randomize(fillProbability float64) {
 				g[i][j] = true
 			}
 		}
-	}
-}
-
-// Print displays the grid
-func (g Grid) Print() {
-	for i := range g {
-		for j := range g[i] {
-			if g[i][j] {
-				fmt.Print("X ")
-			} else {
-				fmt.Print(". ")
-			}
-		}
-		fmt.Println()
 	}
 }
 
@@ -66,8 +68,8 @@ func (g Grid) NextGeneration() Grid {
 // countNeighbors counts the number of live neighbors for a cell
 func (g Grid) countNeighbors(row, col int) int {
 	count := 0
-	for i := row - 1; i <= row+1; i++ {
-		for j := col - 1; j <= col+1; j++ {
+	for i := row - 1; i <= row + 1; i++ {
+		for j := col - 1; j <= col + 1; j++ {
 			if i >= 0 && i < len(g) && j >= 0 && j < len(g[0]) && (i != row || j != col) && g[i][j] {
 				count++
 			}
@@ -76,18 +78,45 @@ func (g Grid) countNeighbors(row, col int) int {
 	return count
 }
 
+// Update proceeds the game state.
+// Update is called every tick (1/60 [s] by default).
+func (g *Game) Update() error {
+	// Update game logic here.
+	g.grid = &g.grid.NextGeneration()
+	time.Sleep(time.Millisecond * 100)
+	return nil
+}
+
+// Draw draws the game screen.
+// Draw is called every frame (typically 1/60[s] for 60Hz display).
+func (g *Game) Draw(screen *ebiten.Image) {
+	// Draw game graphics here.
+	for row := range g.grid {
+		for col, cell := range g.grid[row] {
+			if cell {
+				ebitenutil.DrawRect(screen, float64(col*cellSize), float64(row*cellSize), cellSize, cellSize, color.White)
+			}
+		}
+	}
+}
+
+// Layout takes care of screen resizing
+func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
+	return screenWidth, screenHeight
+}
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	rows := 10
-	cols := 20
+	rows := screenHeight / cellSize
+	cols := screenWidth / cellSize
 	grid := NewGrid(rows, cols)
 	grid.Randomize(0.3)
 
-	for {
-		fmt.Print("\033[H\033[2J") // Clear the screen
-		grid.Print()
-		grid = grid.NextGeneration()
-		time.Sleep(time.Millisecond * 100)
+	game := &Game{grid: &grid}
+	ebiten.SetWindowSize(screenWidth, screenHeight)
+	ebiten.SetWindowTitle("Conway's Game of Life (Ebiten)")
+	if err := ebiten.RunGame(game); err != nil {
+		log.Fatal(err)
 	}
 }
