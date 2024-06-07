@@ -217,4 +217,4 @@ def draw_grid(screen, grid, cell_size):
             color = (0, 0, 0) if node.on else (255, 255, 255)
             rect = pygame.Rect(node.xy[1] * cell_size, node.xy[0] * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, color, rect)
-            pygame.draw.rect(screen, GRAY, rect
+            pygame.draw.rect(screen, GRAY, rect)
