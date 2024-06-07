@@ -1,10 +1,10 @@
-module github.com/<your-username>/conway-game-of-life-ebiten
+module conway.go
 
 go 1.22.4
 
 require (
 	github.com/hajimehoshi/ebiten/v2 v2.7.4
-	golang.org/x/image v0.16.0
+	golang.org/x/image v0.17.0
 )
 
 require (
