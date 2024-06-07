@@ -8,97 +8,10 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-)
-
-const (
-	screenWidth  = 640
-	screenHeight = 480
-	cellSize     = 10
-)
-
-// Game implements ebiten.Game interface.
-type Game struct {
-	grid     *Grid
-	gameState string
-}
-
-// Grid represents the game board
-type Grid [][]bool
-
-// NewGrid creates a new grid with the given dimensions
-func NewGrid(rows, cols int) Grid {
-	grid := make(Grid, rows)
-	for i := range grid {
-		grid[i] = make([]bool, cols)
-	}
-	return grid
-}
-
-// Randomize populates the grid with random cells
-func (g Grid) Randomize(fillProbability float64) {
-	for i := range g {
-		for j := range g[i] {
-			if rand.Float64() < fillProbability {
-				g[i][j] = true
-			}
-		}
-	}
-}
-
-// NextGeneration calculates the next generation of the grid
-func (g Grid) NextGeneration() Grid {
-	newGrid := NewGrid(len(g), len(g[0]))
-	for i := range g {
-		for j := range g[i] {
-			neighbors := g.countNeighbors(i, j)
-			if g[i][j] {
-				if neighbors == 2 || neighbors == 3 {
-					newGrid[i][j] = true
-				}
-			} else {
-				if neighbors == 3 {
-					newGrid[i][j] = true
-				}
-			}
-		}
-	}
-	return newGrid
-}
-
-// countNeighbors counts the number of live neighbors for a cell
-func (g Grid) countNeighbors(row, col int) int {
-	count := 0
-	for i := row - 1; i <= row + 1; i++ {
-		for j := col - 1; j <= col + 1; j++ {
-			if i >= 0 && i < len(g) && j >= 0 && j < len(g[0]) && (i != row || j != col) && g[i][j] {
-				count++
-			}
-		}
-	}
-	return count
-}
-
-// Update proceeds the game state.
-// Update is called every tick (1/60 [s] by default).
-func (g *Game) Update() error {
-	// Update game logic here.
-	if g.gameState == "running" {
-		newGrid := g.grid.NextGeneration()
-		*g.grid = newGrid
-		time.Sleep(time.Millisecond * 100)
-	}
-	return nil
-}
-
-import (
-	"image/color"
-	"log"
-	"math/rand"
-	"time"
-
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text"
+
+	"golang.org/x/image/font/basicfont"
 )
 
 const (
