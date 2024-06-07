@@ -108,7 +108,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	// Draw game graphics here.
 	if g.gameState == "startMenu" {
 		// Draw start menu
-		drawButton(screen, 270, 180, 100, 50, color.White, "Start")
+		drawButton(screen, 270, 180, 100, 50, color.White, "PLAY")
 	} else {
 		for row := range *g.grid {
 			for col, cell := range (*g.grid)[row] {
