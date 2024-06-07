@@ -26,8 +26,8 @@ A live cell with more than 3 live neighbors dies (overpopulation).
 1. Make sure you have Go installed on your system.
 2. Install the Ebiten game library: `go get github.com/hajimehoshi/ebiten/v2`
 3. Clone this repository: `git clone https://github.com/nomopo45/gameOflife.git`
-4. Navigate to the project directory: `cd conway-game-of-life-ebiten`
-5. Initialize go modules: `go mod init github.com/<your-username>/conway-game-of-life-ebiten`
+4. Navigate to the project directory: `cd gameOflife`
+5. Initialize go modules: `go mod init conway.go`
 6. Install dependencies: `go mod tidy`
 7. Run the game: `go run .`
 
