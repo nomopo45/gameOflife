@@ -18,7 +18,8 @@ const (
 
 // Game implements ebiten.Game interface.
 type Game struct {
-	grid *Grid
+	grid     *Grid
+	gameState string
 }
 
 // Grid represents the game board
@@ -81,9 +82,11 @@ func (g Grid) countNeighbors(row, col int) int {
 // Update is called every tick (1/60 [s] by default).
 func (g *Game) Update() error {
 	// Update game logic here.
-	newGrid := g.grid.NextGeneration()
-	*g.grid = newGrid
-	time.Sleep(time.Millisecond * 100)
+	if g.gameState == "running" {
+		newGrid := g.grid.NextGeneration()
+		*g.grid = newGrid
+		time.Sleep(time.Millisecond * 100)
+	}
 	return nil
 }
 
@@ -91,10 +94,15 @@ func (g *Game) Update() error {
 // Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
 	// Draw game graphics here.
-	for row := range *g.grid {
-		for col, cell := range (*g.grid)[row] {
-			if cell {
-				ebitenutil.DrawRect(screen, float64(col*cellSize), float64(row*cellSize), cellSize, cellSize, color.White)
+	if g.gameState == "startMenu" {
+		// Draw start menu
+		ebitenutil.DebugPrint(screen, "Press S to start")
+	} else {
+		for row := range *g.grid {
+			for col, cell := range (*g.grid)[row] {
+				if cell {
+					ebitenutil.DrawRect(screen, float64(col*cellSize), float64(row*cellSize), cellSize, cellSize, color.White)
+				}
 			}
 		}
 	}
@@ -113,7 +121,7 @@ func main() {
 	grid := NewGrid(rows, cols)
 	grid.Randomize(0.3)
 
-	game := &Game{grid: &grid}
+	game := &Game{grid: &grid, gameState: "startMenu"}
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Conway's Game of Life (Ebiten)")
 	if err := ebiten.RunGame(game); err != nil {
