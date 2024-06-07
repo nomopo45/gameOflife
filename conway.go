@@ -81,7 +81,8 @@ func (g Grid) countNeighbors(row, col int) int {
 // Update is called every tick (1/60 [s] by default).
 func (g *Game) Update() error {
 	// Update game logic here.
-	g.grid = &g.grid.NextGeneration()
+	newGrid := g.grid.NextGeneration()
+	*g.grid = newGrid
 	time.Sleep(time.Millisecond * 100)
 	return nil
 }
