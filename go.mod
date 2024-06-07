@@ -1,4 +1,4 @@
-module conway.go
+module github.com/<your-username>/conway-game-of-life-ebiten
 
 go 1.22.4
 
@@ -15,8 +15,3 @@ require (
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 )
-module github.com/<your-username>/conway-game-of-life-ebiten
-
-go 1.19
-
-require github.com/hajimehoshi/ebiten/v2 v2.5.1
